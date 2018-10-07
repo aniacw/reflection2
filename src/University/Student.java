@@ -1,3 +1,5 @@
+package University;
+
 public class Student extends Person {
 
     private int year;
