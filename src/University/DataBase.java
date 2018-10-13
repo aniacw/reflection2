@@ -14,4 +14,8 @@ public class DataBase {
     public void add(Person person){
         personList.add(person);
     }
+
+    public List<Person> getPersonList() {
+        return personList;
+    }
 }

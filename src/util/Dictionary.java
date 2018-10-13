@@ -8,29 +8,18 @@ import java.util.Map;
 
 public class Dictionary {
 
-
     public Map<String, Object> memberValuesDictionary(Object o) throws IllegalAccessException {
         Class aclass = o.getClass();
         Field[] fields = aclass.getDeclaredFields();
         Map<String, Object> newMap = new HashMap<>();
 
-//        for(Field f : fields){
-//            try {
-//                f.setAccessible(true);
-//            } catch (IllegalArgumentException e){
-//                e.printStackTrace();
-//            }
-//
-//        }
-
-
-        for (int i = 0; i < fields.length; i++) {
+        for (int i = 0; i < fields.length; i++)
             newMap.put(fields[i].getName(), fields[i].get(o));
-        }
+
         return newMap;
     }
 
-    public static String getterName(String fieldName){
+    public static String getterName(String fieldName) {
         StringBuilder builder = new StringBuilder(fieldName.length() + 3);
         builder.append("get");
         builder.append(fieldName);
@@ -38,7 +27,7 @@ public class Dictionary {
         return builder.toString();
     }
 
-    public static String setterName(String fieldName){
+    public static String setterName(String fieldName) {
         StringBuilder builder = new StringBuilder(fieldName.length() + 3);
         builder.append("set");
         builder.append(fieldName);
@@ -47,8 +36,8 @@ public class Dictionary {
     }
 
     public static Method getter(Field field) throws NoSuchMethodException {
-           String fieldName = getterName(field.getName());
-           return field.getDeclaringClass().getMethod(fieldName);
+        String fieldName = getterName(field.getName());
+        return field.getDeclaringClass().getMethod(fieldName);
     }
 
     public static Method setter(Field field) throws NoSuchMethodException {
@@ -59,6 +48,7 @@ public class Dictionary {
     public static Map<String, FieldInfo> memberInfoDictionary(Class c) {
         if (c == null)
             return new HashMap<>();
+
         Field[] fields = c.getDeclaredFields();
         Map<String, FieldInfo> newMap = new HashMap<>();
         for (Field f : fields) {
@@ -71,9 +61,8 @@ public class Dictionary {
             }
             try {
                 info.setter = setter(f);
-            }
-            catch (NoSuchMethodException e){
-                info.setter=null;
+            } catch (NoSuchMethodException e) {
+                info.setter = null;
             }
             newMap.put(f.getName(), info);
         }
@@ -81,9 +70,3 @@ public class Dictionary {
         return newMap;
     }
 }
-
-//Napisz funkcję
-//Map<String, Object> membersDictionary(Object o)
-//która dostaje obiekt, wyciąga z niego wszystkie pola, i tworzy mapę [nazwa pola] -> [wartość pola]
-//Kluczem mapy są nazwy - stringi, wartościami Object, dlatego że typy pól mogą być różne, a chcemy
-//zapisać wszystko w jednej mapie.
