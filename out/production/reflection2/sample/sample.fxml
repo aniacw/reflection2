@@ -9,33 +9,70 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<GridPane prefHeight="540.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
-  <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="285.0" minWidth="10.0" prefWidth="285.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="98.0" />
-    <ColumnConstraints hgrow="SOMETIMES" maxWidth="196.0" minWidth="10.0" prefWidth="110.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="116.0" minWidth="10.0" prefWidth="50.0" />
-  </columnConstraints>
-  <rowConstraints>
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="372.0" minHeight="10.0" prefHeight="355.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="192.0" minHeight="0.0" prefHeight="37.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="156.0" minHeight="0.0" prefHeight="24.0" vgrow="SOMETIMES" />
-    <RowConstraints maxHeight="72.0" minHeight="0.0" prefHeight="25.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-  </rowConstraints>
-   <children>
-      <ComboBox fx:id="personType" onAction="#onPersonTypeSelected" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <Label alignment="CENTER" text="Type of Person" GridPane.rowIndex="1" />
-      <ListView fx:id="personListView" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-      <Button fx:id="displayDatabase" mnemonicParsing="false" onAction="#onButtonDisplayDatabaseClicked" text="Display Database" textOverrun="CLIP" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-      <Label fx:id="listOfPersons" text="List of Persons" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-      <Button fx:id="displayFields" alignment="CENTER" mnemonicParsing="false" onAction="#onButtonDisplayFieldsClicked" text="Display Fields" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
-      <Button fx:id="create" mnemonicParsing="false" onAction="#onButtonCreateClicked" text="Create" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-      <VBox fx:id="fieldVBox" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-      <CheckBox fx:id="notRobot" mnemonicParsing="false" text="I'm not a robot" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-   </children>
+<GridPane prefHeight="540.0" prefWidth="800.0" style="-fx-background-color: lightblue"
+          xmlns="http://javafx.com/javafx/8.0.121"
+          xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="161.0" minWidth="10.0" prefWidth="145.0"/>
+        <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="285.0" minWidth="10.0" prefWidth="252.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="98.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="196.0" minWidth="10.0" prefWidth="110.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="116.0" minWidth="10.0" prefWidth="50.0"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="372.0" minHeight="10.0" prefHeight="355.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="192.0" minHeight="0.0" prefHeight="37.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="156.0" minHeight="0.0" prefHeight="24.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="72.0" minHeight="0.0" prefHeight="25.0" vgrow="SOMETIMES"/>
+        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <children>
+        <ComboBox fx:id="personType" onAction="#onPersonTypeSelected" prefWidth="150.0" GridPane.columnIndex="1"
+                  GridPane.rowIndex="1"/>
+        <Label alignment="CENTER" contentDisplay="CENTER" style="-fx-background-color: lightgrey" text="Type of Person"
+               textAlignment="CENTER" textFill="#382fda"
+               GridPane.rowIndex="1">
+            <font>
+                <Font name="Droid Serif Bold" size="12.0"/>
+            </font>
+        </Label>
+        <ListView fx:id="personListView" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: lightgrey"
+                  GridPane.columnIndex="4" GridPane.rowIndex="1"/>
+        <Button fx:id="displayDatabase" minWidth="150.0" mnemonicParsing="false"
+                onAction="#onButtonDisplayDatabaseClicked"
+                text="Display Database" textFill="#4367ab" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <font>
+                <Font name="Droid Serif Bold" size="12.0"/>
+            </font>
+        </Button>
+        <Label fx:id="listOfPersons" style="-fx-background-color: lightgrey" text="List of Persons" textFill="#382fda"
+               GridPane.columnIndex="3" GridPane.rowIndex="1">
+            <font>
+                <Font name="Droid Serif Bold" size="12.0"/>
+            </font>
+        </Label>
+        <Button fx:id="displayFields" alignment="CENTER" contentDisplay="CENTER" minWidth="150.0"
+                mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#onButtonDisplayFieldsClicked"
+                text="Display Fields" textAlignment="CENTER" textFill="#4367ab" textOverrun="WORD_ELLIPSIS"
+                GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+            <font>
+                <Font name="Droid Serif Bold" size="12.0"/>
+            </font>
+        </Button>
+        <Button fx:id="create" minWidth="150.0" mnemonicParsing="false" onAction="#onButtonCreateClicked" text="Create"
+                textFill="#4367ab" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <font>
+                <Font name="Droid Serif Bold" size="12.0"/>
+            </font>
+        </Button>
+        <VBox fx:id="fieldVBox" prefHeight="200.0" prefWidth="100.0"
+              style=" -fx-border-color:grey; -fx-border-width: 1; -fx-border-style: solid;  -fx-background-color: lightgrey"
+              GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+        <CheckBox fx:id="notRobot" mnemonicParsing="false" text="I'm not a robot" GridPane.columnIndex="4"
+                  GridPane.rowIndex="3"/>
+    </children>
 </GridPane>

@@ -5,16 +5,18 @@ import University.Person;
 import University.Student;
 import University.Teacher;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import util.Dictionary;
 import util.FieldInfo;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Scanner;
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class Controller {
     private Person person;
@@ -68,8 +70,6 @@ public class Controller {
         //
     }
 
-    ArrayList<TextField> textFields = new ArrayList<>();
-
     public void onPersonTypeSelected(ActionEvent actionEvent) {
         Class c = personType.getValue();
         if (c == null)
@@ -81,11 +81,13 @@ public class Controller {
             TextField newField = new TextField();
             newField.setPromptText(f.field.getName());
             fieldVBox.getChildren().add(newField);
+            fieldArrayList.add(newField);
         }
     }
 
-    Scanner scanner = new Scanner(System.in);
-    String input = scanner.nextLine();
+
+    List<TextField> fieldArrayList;
+
 
     public void onButtonCreateClicked(ActionEvent actionEvent) {
         String personTypeString = personType.getValue().toString();
@@ -94,12 +96,12 @@ public class Controller {
             case "Student":
                 Student student = new Student();
                 try {
-                    student.setYear(Integer.parseInt(input));
+                    student.setYear(getAllFields(student));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                student.setId(Integer.parseInt(input));
-                student.setName(input);
+                student.setId();
+                student.setName();
                 Alert.display("Revise your input", "Make sure you've got all the fields filled in");
                 checkIfRobot();
                 dataBase.add(student);
@@ -107,9 +109,9 @@ public class Controller {
 
             case "Teacher":
                 Teacher teacher = new Teacher();
-                teacher.setSubject(input);
-                teacher.setId(Integer.parseInt(input));
-                teacher.setName(input);
+                teacher.setSubject();
+                teacher.setId();
+                teacher.setName();
                 Alert.display("Revise your input", "Make sure you've got all the fields filled in");
                 checkIfRobot();
                 dataBase.add(teacher);
@@ -117,8 +119,25 @@ public class Controller {
         }
     }
 
-    public void checkIfRobot(){
-        if(notRobot.isSelected() == false)
+    public void checkIfRobot() {
+        if (notRobot.isSelected() == false)
             Alert.display("Warning", "Confirm you're not a robot");
     }
+
+//    public List<Field> getAllFields(Person person) {
+//        fieldArrayList = new ArrayList<>();
+//        Class clazz = person.getClass();
+//        while (clazz != Object.class) {
+//            fieldArrayList.addAll(Arrays.asList(clazz.getDeclaredFields()));
+//            clazz = clazz.getSuperclass();
+//        }
+//        return fieldArrayList;
+//    }
+
+//    public void verifyTextFieldName(String textFieldName) {
+//
+//        if(textFieldName.equals())
+//
+//    }
+
 }
