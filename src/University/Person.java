@@ -3,7 +3,7 @@ package University;
 public class Person {
 
     private String name;
-    private int id;
+    private String id;
 
     public Person() {
     }
@@ -12,7 +12,7 @@ public class Person {
         this.name = name;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -20,7 +20,7 @@ public class Person {
         return name;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 }

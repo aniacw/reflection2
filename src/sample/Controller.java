@@ -10,12 +10,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import util.Dictionary;
 import util.FieldInfo;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class Controller {
@@ -35,7 +37,7 @@ public class Controller {
     Button displayFields;
 
     @FXML
-    Button create;
+    Button update;
 
     @FXML
     private ComboBox<Class> personType;
@@ -45,6 +47,9 @@ public class Controller {
 
     @FXML
     VBox fieldVBox;
+
+    @FXML
+    VBox fieldLabelVBox;
 
     @FXML
     CheckBox notRobot;
@@ -70,74 +75,138 @@ public class Controller {
         //
     }
 
+
     public void onPersonTypeSelected(ActionEvent actionEvent) {
+        if (personType.getSelectionModel().getSelectedItem() != null)
+            personListView.getSelectionModel().clearSelection();
         Class c = personType.getValue();
         if (c == null)
             return;
         Map<String, FieldInfo> fieldsInfo = util.Dictionary.memberInfoDictionary(c);
         fieldVBox.getChildren().clear();
-
+        fieldLabelVBox.getChildren().clear();
         for (FieldInfo f : fieldsInfo.values()) {
             TextField newField = new TextField();
             newField.setPromptText(f.field.getName());
+            newField.setPrefHeight(30);
+            newField.setId(f.field.getName());
             fieldVBox.getChildren().add(newField);
-            fieldArrayList.add(newField);
+            Label label = new Label(f.field.getName());
+            label.setPrefHeight(30);
+            fieldLabelVBox.getChildren().add(label);
         }
+
     }
 
 
-    List<TextField> fieldArrayList;
-
-
-    public void onButtonCreateClicked(ActionEvent actionEvent) {
-        String personTypeString = personType.getValue().toString();
-
-        switch (personTypeString) {
-            case "Student":
-                Student student = new Student();
-                try {
-                    student.setYear(getAllFields(student));
-                } catch (Exception e) {
-                    e.printStackTrace();
+    private void updatePersonData(Person person){
+        try {
+            Map<String, FieldInfo> fieldsInfo = util.Dictionary.memberInfoDictionary(person.getClass());
+            for(FieldInfo f : fieldsInfo.values()) {
+                String textBoxValue = getTextBoxValue(f.field.getName());
+                if (textBoxValue != null) {
+                    f.setter.invoke(person, textBoxValue);
                 }
-                student.setId();
-                student.setName();
-                Alert.display("Revise your input", "Make sure you've got all the fields filled in");
-                checkIfRobot();
-                dataBase.add(student);
-                break;
-
-            case "Teacher":
-                Teacher teacher = new Teacher();
-                teacher.setSubject();
-                teacher.setId();
-                teacher.setName();
-                Alert.display("Revise your input", "Make sure you've got all the fields filled in");
-                checkIfRobot();
-                dataBase.add(teacher);
-                break;
+            }
+        } catch ( IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
         }
     }
 
-    public void checkIfRobot() {
-        if (notRobot.isSelected() == false)
-            Alert.display("Warning", "Confirm you're not a robot");
+    public void onButtonUpdateClicked(ActionEvent actionEvent) {
+        Person selectedPerson = personListView.getSelectionModel().getSelectedItem();
+        if (selectedPerson == null) {
+            Class type = personType.getValue();
+            try {
+                if (!checkIfRobot())
+                    return;
+                Person person = (Person) type.getConstructor().newInstance();
+                updatePersonData(person);
+                dataBase.add(person);
+                personListView.getItems().add(person);
+            } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            updatePersonData(selectedPerson);
+        }
+
+//
+//        switch (personTypeString) {
+//            case "Student":
+//                Student student = new Student();
+//                try {
+//                    student.setYear();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                student.setId();
+//                student.setName();
+//                Alert.display("Revise your input", "Make sure you've got all the fields filled in");
+//                checkIfRobot();
+//                dataBase.add(student);
+//                break;
+//
+//            case "Teacher":
+//                Teacher teacher = new Teacher();
+//                teacher.setSubject();
+//                teacher.setId();
+//                teacher.setName();
+//                Alert.display("Revise your input", "Make sure you've got all the fields filled in");
+//                checkIfRobot();
+//                dataBase.add(teacher);
+//                break;
+//        }
     }
 
-//    public List<Field> getAllFields(Person person) {
-//        fieldArrayList = new ArrayList<>();
-//        Class clazz = person.getClass();
-//        while (clazz != Object.class) {
-//            fieldArrayList.addAll(Arrays.asList(clazz.getDeclaredFields()));
-//            clazz = clazz.getSuperclass();
-//        }
-//        return fieldArrayList;
-//    }
+    private boolean checkIfRobot() {
+        if (notRobot.isSelected() == false) {
+            Alert.display("Warning", "Confirm you're not a robot");
+            return false;
+        }
+        else
+            return true;
+    }
 
-//    public void verifyTextFieldName(String textFieldName) {
-//
-//        if(textFieldName.equals())
-//
-//    }
 
+    private String getTextBoxValue(String fieldName) {
+        String textFieldId;
+        TextField textField;
+        ObservableList<Node> observableList = fieldVBox.getChildren();
+        for (Node n : observableList) {
+            textField = (TextField)n;
+            textFieldId = n.getId();
+            if(textFieldId.equals(fieldName)){
+                return textField.getText();
+            }
+        }
+        return null;
+    }
+
+    public void onPersonListViewClicked(MouseEvent mouseEvent) {
+        if (personListView.getSelectionModel().getSelectedItem() != null)
+            personType.getSelectionModel().clearSelection();
+        Person selectedPerson = personListView.getSelectionModel().getSelectedItem();
+        Class type = selectedPerson.getClass();
+
+        Map<String, FieldInfo> fieldsInfo = util.Dictionary.memberInfoDictionary(type);
+        fieldVBox.getChildren().clear();
+        fieldLabelVBox.getChildren().clear();
+        for (FieldInfo f : fieldsInfo.values()) {
+            TextField newField = new TextField();
+            newField.setPromptText(f.field.getName());
+            try {
+                newField.setText((String)f.getter.invoke(selectedPerson));
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                newField.setText("???");
+            }
+            newField.setPrefHeight(30);
+            newField.setId(f.field.getName());
+            fieldVBox.getChildren().add(newField);
+            Label label = new Label(f.field.getName());
+            label.setPrefHeight(30);
+            fieldLabelVBox.getChildren().add(label);
+        }
+    }
 }
